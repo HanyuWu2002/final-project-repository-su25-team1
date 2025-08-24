@@ -1,8 +1,16 @@
-
+import rclpy
+from lane_following.lane_following.lidar_node import LidarNode
 
 
 def main():
-    print("Lane Following")
+    rclpy.init()
+
+    lidarNode = LidarNode()
+
+    rclpy.spin(lidarNode)
+
+    lidarNode.destroy()
+    rclpy.shutdown()
 
 
 if __name__ == '__main__':
