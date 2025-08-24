@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import ReliabilityPolicy, QoSProfile
+from sensor_msgs.msg import Image
 # from lane_following.lane_following.lidar_node import LidarNode
 
 class LidarNode(Node):
@@ -11,6 +12,15 @@ class LidarNode(Node):
 
     def lidar_callback(self, msg):
         self.get_logger().info(f'Received LaserScan {msg}')
+
+class CameraNode(Node):
+    def __init__(self):
+        super().__init__('camera_node')
+        self.get_logger().info('Camera Node started')
+        self.subscription = self.create_subscription(Image, '/camera/color/image_raw', self.camera_callback, qos_profile=QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
+
+    def camera_callback(self, msg):
+        self.get_logger().info(f'Received Image {msg}')
 
 
 def main():
