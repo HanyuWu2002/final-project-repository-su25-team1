@@ -26,11 +26,11 @@ class CameraNode(Node):
 def main():
     rclpy.init()
 
-    lidarNode = LidarNode()
+    camera_node = CameraNode()
 
-    rclpy.spin(lidarNode)
+    rclpy.spin(camera_node)
 
-    lidarNode.destroy()
+    camera_node.destroy()
     rclpy.shutdown()
 
 
