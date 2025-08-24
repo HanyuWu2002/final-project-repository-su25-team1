@@ -1,5 +1,5 @@
 import rclpy
-from lane_following.lane_following.lidar_node import LidarNode
+from lane_following.lidar_node import LidarNode
 
 
 def main():
