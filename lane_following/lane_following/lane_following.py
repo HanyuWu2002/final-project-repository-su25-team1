@@ -2,7 +2,6 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import ReliabilityPolicy, QoSProfile
 from sensor_msgs.msg import Image
-# from lane_following.lane_following.lidar_node import LidarNode
 
 class LidarNode(Node):
     def __init__(self):
@@ -26,11 +25,11 @@ class CameraNode(Node):
 def main():
     rclpy.init()
 
-    camera_node = CameraNode()
+    lidar_node = LidarNode()
 
-    rclpy.spin(camera_node)
+    rclpy.spin(lidar_node)
 
-    camera_node.destroy()
+    lidar_node.destroy()
     rclpy.shutdown()
 
 
