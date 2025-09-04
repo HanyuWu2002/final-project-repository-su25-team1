@@ -1,7 +1,10 @@
+import math
+
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import ReliabilityPolicy, QoSProfile
 from sensor_msgs.msg import Image, LaserScan
+import math
 
 class LidarNode(Node):
     def __init__(self):
@@ -11,7 +14,7 @@ class LidarNode(Node):
         self.subscription = self.create_subscription(LaserScan, '/scan', self.lidar_callback, qos_profile=QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
 
     def lidar_callback(self, msg):
-        if (msg.min_angle >= 0 and  msg.max_angle <= 60) or (msg.min_angle >= 310 or msg.max_angle >= 360):
+        if (msg.min_angle >= 0 and  msg.max_angle <= math.radians(60)) or (msg.min_angle >= math.radians(310) or msg.max_angle >= math.radians(360)):
             self.get_logger().warn(f'Received LaserScan {msg.ranges}')
 
 
