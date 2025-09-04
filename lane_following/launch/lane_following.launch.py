@@ -8,9 +8,5 @@ def generate_launch_description():
             executable='lane_following_executable',
             output='screen',
             emulate_tty=True
-          ),
-          # Node(
-          #     package='ucsd_robocar_nav2_pkg',
-          #     executable='ucsd_robocar_nav2_pkg',
-          # )
+          )
     ])

@@ -11,7 +11,9 @@ class LidarNode(Node):
         self.subscription = self.create_subscription(LaserScan, '/scan', self.lidar_callback, qos_profile=QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
 
     def lidar_callback(self, msg):
-        self.get_logger().info(f'Received LaserScan {msg}')
+        if (msg.min_angle >= 0 and  msg.max_angle <= 60) or (msg.min_angle >= 310 or msg.max_angle >= 360):
+            self.get_logger().info(f'Received LaserScan {msg.ranges}')
+
 
 class CameraNode(Node):
     def __init__(self):
