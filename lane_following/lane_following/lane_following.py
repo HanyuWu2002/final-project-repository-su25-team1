@@ -14,7 +14,7 @@ class LidarNode(Node):
         self.subscription = self.create_subscription(LaserScan, '/scan', self.lidar_callback, qos_profile=QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
 
     def lidar_callback(self, msg):
-        if (msg.angle_min >= 0 and  msg.angle_max <= math.radians(60)) or (msg.angle_min >= math.radians(310) and msg.angle_max >= math.radians(360)):
+        if msg.angle_min >= 0 and  msg.angle_max <= math.radians(60):
             self.get_logger().warn(f'FILTERED ANGLES {msg.ranges}')
         else:
             self.get_logger().info(f'OTHER ANGLES {msg.ranges}')
