@@ -1,13 +1,14 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import ReliabilityPolicy, QoSProfile
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, LaserScan
 
 class LidarNode(Node):
     def __init__(self):
         super().__init__('lidar_node')
         self.get_logger().info('Lidar Node started')
-        self.subscription = self.create_subscription('sensor_msgs/msg/LaserScan', '/scan', self.lidar_callback, qos_profile=QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
+
+        self.subscription = self.create_subscription(LaserScan, '/scan', self.lidar_callback, qos_profile=QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
 
     def lidar_callback(self, msg):
         self.get_logger().info(f'Received LaserScan {msg}')
