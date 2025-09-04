@@ -15,7 +15,9 @@ class LidarNode(Node):
 
     def lidar_callback(self, msg):
         if (msg.angle_min >= 0 and  msg.angle_max <= math.radians(60)) or (msg.angle_min >= math.radians(310) or msg.angle_max >= math.radians(360)):
-            self.get_logger().warn(f'Received LaserScan {msg.ranges}')
+            self.get_logger().warn(f'FILTERED ANGLES {msg.ranges}')
+        else:
+            self.get_logger().info(f'OTHER ANGLES {msg.ranges}')
 
 
 class CameraNode(Node):
