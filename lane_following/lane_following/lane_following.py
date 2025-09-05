@@ -18,15 +18,52 @@ class LidarNode(Node):
         self.twist.linear.x = 2.0
         self.speed_publisher.publish(self.twist)
 
-    def detect_object(self, points):
-        # Loop through points
-        # Detect if something is closer than the threshold
-        # if it is put it in the detected
-        for point in points:
-            if point < self.min_distance:
-                self.twist.linear.x = 0.0
-                self.speed_publisher.publish(self.twist)
-                self.get_logger().fatal(f'OBJECT DETECTED at point {point}')
+    def detect_object(self, msg):
+        ranges = msg.ranges
+        angle_min = msg.angle_min
+        angle_increment = msg.angle_increment
+        num_ranges = len(ranges)
+
+        def angle_to_index(angle_deg):
+            """Convert angle in degrees to index in ranges[]"""
+            angle_rad = math.radians(angle_deg)
+            index = int((angle_rad - angle_min) / angle_increment)
+            return max(0, min(index, num_ranges - 1))
+
+        def get_sector(start_deg, end_deg):
+            """Get cleaned range values between angles"""
+            start_idx = angle_to_index(start_deg)
+            end_idx = angle_to_index(end_deg)
+
+            if end_idx >= start_idx:
+                sector = ranges[start_idx:end_idx]
+            else:
+                sector = ranges[start_idx:] + ranges[:end_idx]
+
+            return [r for r in sector if 0.0 < r < float('inf')]
+
+        # Define sectors (adjust angles if needed for your setup)
+        front_sector = get_sector(-30, 30)
+        left_sector = get_sector(60, 120)
+        right_sector = get_sector(-120, -60)
+
+        msg_out = String()
+
+        if front_sector and min(front_sector) < 0.5:
+            clear_left = self.count_clear(left_sector)
+            clear_right = self.count_clear(right_sector)
+
+            self.get_logger().info(f"Obstacle ahead. Left: {clear_left}, Right: {clear_right}")
+
+            if clear_left > clear_right:
+                msg_out.data = "LEFT"
+            else:
+                msg_out.data = "RIGHT"
+        else:
+            msg_out.data = "No obstacle. FORWARD."
+
+        self.get_logger().info(msg_out.data)
+        # self.pub.publish(msg_out)
 
 
     def lidar_callback(self, msg):
