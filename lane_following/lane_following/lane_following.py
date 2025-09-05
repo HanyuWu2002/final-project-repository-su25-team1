@@ -1,9 +1,9 @@
-import math
-
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import ReliabilityPolicy, QoSProfile
 from sensor_msgs.msg import Image, LaserScan
+from std_msgs.msg import Float32, Int32, Int32MultiArray, String
+from geometry_msgs.msg import Twist
 import math
 
 class LidarNode(Node):
@@ -11,12 +11,24 @@ class LidarNode(Node):
         super().__init__('lidar_node')
         self.get_logger().info('Lidar Node started')
 
+        self.min_distance = 0.3 # meters
         self.subscription = self.create_subscription(LaserScan, '/scan', self.lidar_callback, qos_profile=QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
+        self.speed_publisher = self.create_publisher(Twist, 'cmd_vel', 10)
+
+    def detect_object(self, points):
+        # Loop through points
+        # Detect if something is closer than the threshold
+        # if it is put it in the detected
+        for point in points:
+            if point < self.min_distance:
+                twist = Twist()
+                twist.linear.x = 0.0
+                self.speed_publisher.publish(twist)
+                self.get_logger().fatal('OBJECT DETECTED')
+
 
     def lidar_callback(self, msg):
-            # for i in range(114):
-            self.get_logger().info(f'{msg.ranges[0]}')
-
+        detect_object(msg.ranges)
 
 class CameraNode(Node):
     def __init__(self):
