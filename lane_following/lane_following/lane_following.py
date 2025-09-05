@@ -18,6 +18,10 @@ class LidarNode(Node):
         self.twist.linear.x = 2.0
         self.speed_publisher.publish(self.twist)
 
+    def count_clear(self, sector):
+        """Count how many values are reasonably clear (0.5m to 3.5m)"""
+        return sum(1 for r in sector if 0.5 < r < 3.5)
+
     def detect_object(self, msg):
         ranges = msg.ranges
         angle_min = msg.angle_min
