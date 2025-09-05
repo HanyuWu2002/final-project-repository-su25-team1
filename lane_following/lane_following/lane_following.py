@@ -67,7 +67,7 @@ class LidarNode(Node):
 
 
     def lidar_callback(self, msg):
-        self.detect_object(msg.ranges)
+        self.detect_object(msg)
 
 class CameraNode(Node):
     def __init__(self):
