@@ -15,7 +15,7 @@ class LidarNode(Node):
         self.subscription = self.create_subscription(LaserScan, '/scan', self.lidar_callback, qos_profile=QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
         self.speed_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
         self.twist = Twist()
-        self.twist.linear.x = 5.0
+        self.twist.linear.x = 10.0
         self.speed_publisher.publish(self.twist)
 
     def count_clear(self, sector):
