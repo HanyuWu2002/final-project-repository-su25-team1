@@ -14,8 +14,8 @@ class LidarNode(Node):
         self.subscription = self.create_subscription(LaserScan, '/scan', self.lidar_callback, qos_profile=QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
 
     def lidar_callback(self, msg):
-            for i in range(114):
-                self.get_logger().info(f'{msg.ranges[i]}')
+            # for i in range(114):
+            self.get_logger().info(f'{msg.ranges[0]}')
 
 
 class CameraNode(Node):
