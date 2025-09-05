@@ -13,7 +13,7 @@ class LidarNode(Node):
 
         self.min_distance = 0.3 # meters
         self.subscription = self.create_subscription(LaserScan, '/scan', self.lidar_callback, qos_profile=QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
-        self.speed_publisher = self.create_publisher(Twist, 'cmd_vel', 10)
+        self.speed_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
         self.twist = Twist()
         self.twist.linear.x = 2.0
         self.speed_publisher.publish(self.twist)
