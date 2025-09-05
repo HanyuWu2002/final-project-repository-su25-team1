@@ -26,7 +26,7 @@ class LidarNode(Node):
             if point < self.min_distance:
                 self.twist.linear.x = 0.0
                 self.speed_publisher.publish(self.twist)
-                self.get_logger().fatal('OBJECT DETECTED')
+                self.get_logger().fatal(f'OBJECT DETECTED at point {point}')
 
 
     def lidar_callback(self, msg):
